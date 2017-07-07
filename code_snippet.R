@@ -44,7 +44,8 @@ assign.neighbors <- function(in.sample=FALSE, NN, rand=FALSE, sample.indx=which(
     ## Keeps track of which variables still need assigned neighbors due to conflicts. 
     need.resolved <- which(duplicated(nearest.neigh.in.samp[, 1]))
 
-    positions.filled <- unique(c(which(!duplicated(nearest.neigh.in.samp[,1])), sample.indx))
+    # Keeps track of which positions have been filled by a nearest neighbor. 
+    positions.filled <- unique(c(which(!duplicated(nearest.neigh.in.samp[,1]))))
 
     
     ## Keeps track of which variable has been assigned which neighbor.
@@ -111,7 +112,7 @@ run.test.cases <- function(){
 
     test.case.2 <- cbind(c(1,2,3), c(3,2,1))
 
-    test.2.result <- all.equal(c(), assign.neighbors(NN=list(nn.index=test.case.2,
+    test.2.result <- all.equal(c(1, 2, 3), assign.neighbors(NN=list(nn.index=test.case.2,
                                                             nn.dist=test.case.2), sample.indx=1))
 
     
@@ -126,5 +127,5 @@ run.test.cases()
 
 load(file="NN.RData")
 
-resulting.assignment <- assign.neighbors(NN=NN, sample.indx=NULL)
+resulting.assignment <- assign.neighbors(NN=NN, sample.indx=which(s>0))
 
