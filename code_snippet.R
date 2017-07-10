@@ -32,34 +32,17 @@ assign.neighbors <- function(NN, rand=FALSE, sample.indx=which(s>0)){
     if(is.null(sample.indx)){
         ## Keeps track of which variables have already been assigned as neighbors.
         used.neighbors <- unique(nearest.neigh.in.samp[, 1])
-        
-    }else{
-        used.neighbors <- unique(nearest.neigh.in.samp[sample.indx, 1])
-    }
-    
-    
 
-    ## If we want to restrict the procedure to just the in sample
-    ## variables, then we don't need to resolve the out of sample
-    ## cases), then follow the "else" branch.
-    if(is.null(sample.indx)){
         ## Keeps track of which variables still need assigned neighbors due to conflicts. 
         need.resolved <- which(duplicated(nearest.neigh.in.samp[, 1]))
 
-    }else{
-        need.resolved <- which(duplicated(nearest.neigh.in.samp[sample.indx, 1]))
-    }
-    
-
-    # If we are restricting the procedure to a sample, then we don't
-    # need to fill out of sample positions, so follow "else" branch.
-    if(is.null(sample.indx)){
         ## Keeps track of which positions have been filled by a nearest neighbor. 
         positions.filled <- unique(c(which(!duplicated(nearest.neigh.in.samp[,1]))))
     }else{
+        used.neighbors <- unique(nearest.neigh.in.samp[sample.indx, 1])
+        need.resolved <- which(duplicated(nearest.neigh.in.samp[sample.indx, 1]))
         positions.filled <- unique(c(which(!duplicated(nearest.neigh.in.samp[sample.indx,1]))))
     }
-
     
     ## Keeps track of which variable has been assigned which neighbor.
     ## A 0 denotes a variable with no assigned neighbor.
