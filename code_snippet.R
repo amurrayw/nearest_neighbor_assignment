@@ -112,8 +112,11 @@ run.test.cases <- function(){
     test.2.result <- all.equal(c(1, 0, 0), assign.neighbors(NN=list(nn.index=test.case.2,
                                                             nn.dist=test.case.2), sample.indx=1))
 
+    test.3.result <- sum(replicate(n=1000, sum(assign.neighbors(NN, rand=TRUE) ==
+                                                    assign.neighbors(NN, rand=TRUE))==1933))==1000
     
-    return(list(test.1.result=test.1.result, test.2.result=test.2.result ))
+    return(list(test.1.result=test.1.result, test.2.result=test.2.result,
+                test.3.result=test.3.result))
     
 }
 
