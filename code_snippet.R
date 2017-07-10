@@ -30,22 +30,44 @@ assign.neighbors <- function(in.sample=FALSE, NN, rand=FALSE, sample.indx=which(
         nearest.neigh.in.samp <- NN$nn.index[in.sample, ]
         nearest.neigh.dist <- NN$nn.dist[in.sample, ]
 
-    }
-    else{
+    }else{
         nearest.neigh.in.samp <- NN$nn.index
         nearest.neigh.dist <- NN$nn.dist
     }
 
-    ## Keeps track of which variables have already been assigned as neighbors.
-    ###TODO: Change this bit here.
-    used.neighbors <- unique(nearest.neigh.in.samp[, 1])
-
+    ## If we want to restrict the procedure to just the in sample
+    ## variables (so that we don't use up neighbors that are a nearest
+    ## match for something outside the sample), follow the "else" branch.
+    if(is.null(sample.indx)){
+        ## Keeps track of which variables have already been assigned as neighbors.
+        used.neighbors <- unique(nearest.neigh.in.samp[, 1])
+        
+    }else{
+        used.neighbors <- unique(nearest.neigh.in.samp[sample.indx, 1])
+    }
     
-    ## Keeps track of which variables still need assigned neighbors due to conflicts. 
-    need.resolved <- which(duplicated(nearest.neigh.in.samp[, 1]))
+    
 
-    # Keeps track of which positions have been filled by a nearest neighbor. 
-    positions.filled <- unique(c(which(!duplicated(nearest.neigh.in.samp[,1]))))
+    ## If we want to restrict the procedure to just the in sample
+    ## variables, then we don't need to resolve the out of sample
+    ## cases), then follow the "else" branch.
+    if(is.null(sample.indx)){
+        ## Keeps track of which variables still need assigned neighbors due to conflicts. 
+        need.resolved <- which(duplicated(nearest.neigh.in.samp[, 1]))
+
+    }else{
+        need.resolved <- which(duplicated(nearest.neigh.in.samp[sample.indx, 1]))
+    }
+    
+
+    # If we are restricting the procedure to a sample, then we don't
+    # need to fill out of sample positions, so follow "else" branch.
+    if(is.null(sample.indx)){
+        ## Keeps track of which positions have been filled by a nearest neighbor. 
+        positions.filled <- unique(c(which(!duplicated(nearest.neigh.in.samp[,1]))))
+    }else{
+        positions.filled <- unique(c(which(!duplicated(nearest.neigh.in.samp[sample.indx,1]))))
+    }
 
     
     ## Keeps track of which variable has been assigned which neighbor.
@@ -54,7 +76,7 @@ assign.neighbors <- function(in.sample=FALSE, NN, rand=FALSE, sample.indx=which(
 
     assignment.vec[positions.filled] <- used.neighbors
 
-    #Forbids sample from being a neighbor.
+                                        #Forbids sample from being a neighbor.
     used.neighbors <- unique(c(used.neighbors, sample.indx))
     
     ## Randomly reorders order of conflict resolution if desired.
