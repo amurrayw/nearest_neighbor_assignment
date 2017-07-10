@@ -72,8 +72,10 @@ assign.neighbors <- function(NN, rand=FALSE, sample.indx=which(s>0)){
 resolve.conflict <- function(need.resolved, used.neighbors, nearest.neigh.in.samp,
                              nearest.neigh.dist, assignment.vec){
 
-    if(length(need.resolved)>0){
-
+    if(length(need.resolved)==0){
+        return(assignment.vec)
+    }
+    else{
         currently.resolving <- need.resolved[1]
         nearest.neighbors <- nearest.neigh.in.samp[currently.resolving,]
         
@@ -91,9 +93,6 @@ resolve.conflict <- function(need.resolved, used.neighbors, nearest.neigh.in.sam
 
         return(resolve.conflict(need.resolved, used.neighbors, nearest.neigh.in.samp,
                                 nearest.neigh.dist, assignment.vec))
-    }
-    else{
-        return(assignment.vec)
     }
 }
 
