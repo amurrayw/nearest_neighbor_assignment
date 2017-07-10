@@ -1,7 +1,4 @@
-###################TODO: Need to restrict the used.neighbors vector to only include the 65 variables from the sample.
-############We don't care if a nearest neighbor has been used up by a variable outside of the sample.
-
-
+## Code written by Alexander Murray-Watters
 
 ## Function: assign.neighbors() = Assigns unique nearest neighbors.
 
@@ -24,16 +21,10 @@
 ## receiving the nearest neighbor. The vector can also include NAs due
 ## to an inability to find an unused nearest neighbor to assign.
 
-assign.neighbors <- function(in.sample=FALSE, NN, rand=FALSE, sample.indx=which(s>0)){
+assign.neighbors <- function(NN, rand=FALSE, sample.indx=which(s>0)){
 
-    if(!is.logical(in.sample)){
-        nearest.neigh.in.samp <- NN$nn.index[in.sample, ]
-        nearest.neigh.dist <- NN$nn.dist[in.sample, ]
-
-    }else{
-        nearest.neigh.in.samp <- NN$nn.index
-        nearest.neigh.dist <- NN$nn.dist
-    }
+    nearest.neigh.in.samp <- NN$nn.index
+    nearest.neigh.dist <- NN$nn.dist
 
     ## If we want to restrict the procedure to just the in sample
     ## variables (so that we don't use up neighbors that are a nearest
@@ -134,7 +125,8 @@ run.test.cases <- function(){
 
     test.case.2 <- cbind(c(1,2,3), c(3,2,1))
 
-    test.2.result <- all.equal(c(1, 2, 3), assign.neighbors(NN=list(nn.index=test.case.2,
+    
+    test.2.result <- all.equal(c(1, 0, 0), assign.neighbors(NN=list(nn.index=test.case.2,
                                                             nn.dist=test.case.2), sample.indx=1))
 
     
